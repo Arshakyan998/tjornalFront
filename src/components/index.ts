@@ -1,0 +1,5 @@
+export { default as Header } from './Header/Header' 
+export {default as MaynLayout} from './MainLayout/MaynLayout'
+export {default as TextArea} from './TextArea/TextArea'
+export {default as Comments} from './Sidebar/Comments/Comments'
+export {default as Menu} from './Sidebar/Menu/Menu'
