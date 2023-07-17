@@ -16,4 +16,5 @@ export interface InitalState {
   user: UserDataResponse;
   error: string;
   loading: boolean;
+  loadingforGetMeByToken: boolean;
 }

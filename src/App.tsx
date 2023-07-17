@@ -6,10 +6,14 @@ import { getMe } from "./store/User/UserSlice";
 
 function App() {
   const dispatch = useAppDispatch();
-  const loading = useAppSelector((state) => state.user.loading);
+  const loading = useAppSelector((state) => state.user.loadingforGetMeByToken);
   React.useLayoutEffect(() => {
     dispatch(getMe());
   }, []);
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <div className="App">

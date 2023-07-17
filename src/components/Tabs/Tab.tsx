@@ -33,7 +33,7 @@ const Tab: React.FC<Props> = ({
           if (activeTab === value) {
             setActiveTabPosition(
               Number(
-                el?.getBoundingClientRect().x -
+                el?.getBoundingClientRect().left -
                   (el?.parentElement!.parentElement?.getBoundingClientRect()
                     .left || 0)
               )

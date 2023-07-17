@@ -42,10 +42,10 @@ export const createUser = createAsyncThunk(
   "create/user",
   async (body: UserRequesDataForRegistration, ThunkApi) => {
     try {
-      const response = await Axios.post<UserDataResponse>(
-        "/auth/registration",
-        body
-      );
+      const response = await Axios.post<
+        UserRequesDataForRegistration,
+        { data: UserDataResponse }
+      >("/auth/registration", body);
       const data = response.data;
 
       return ThunkApi.fulfillWithValue(data);
@@ -62,56 +62,63 @@ const userSlice = createSlice({
     user: {},
     error: "",
     loading: false,
+    loadingforGetMeByToken: true,
   } as InitalState,
   name: "user",
   reducers: {},
-  extraReducers: {
-    [getUser.pending.type || getMe.pending.type]: (state) => {
+  extraReducers: (builder) => {
+    builder.addCase(getUser.pending.type, (state) => {
       state.loading = true;
-    },
-    [getUser.fulfilled.type || getMe.fulfilled.type]: (
-      state,
-      action: PayloadAction<UserDataResponse>
-    ) => {
-      state.loading = false;
-      state.error = "";
-      state.user = action.payload;
-    },
-    [getUser.rejected.type || getMe.rejected.type]: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
+    });
+    builder.addCase(
+      getUser.fulfilled.type,
+      (state, action: PayloadAction<UserDataResponse>) => {
+        state.loading = false;
+        state.error = "";
+        state.user = action.payload;
+      }
+    );
+    builder.addCase(
+      getUser.rejected.type,
+      (state, action: PayloadAction<string>) => {
+        state.loading = false;
+        state.error = action.payload;
+      }
+    );
 
-    [getMe.pending.type]: (state) => {
-      state.loading = true;
-    },
-    [getMe.fulfilled.type]: (
-      state,
-      action: PayloadAction<UserDataResponse>
-    ) => {
-      state.loading = false;
-      state.error = "";
-      state.user = action.payload;
-    },
-    [getMe.rejected.type]: (state) => {
-      state.loading = false;
-    },
+    builder.addCase(getMe.pending.type, (state) => {
+      state.loadingforGetMeByToken = true;
+    });
+    builder.addCase(
+      getMe.fulfilled.type,
+      (state, action: PayloadAction<UserDataResponse>) => {
+        state.loadingforGetMeByToken = false;
+        state.error = "";
+        state.user = action.payload;
+      }
+    );
+    builder.addCase(getMe.rejected.type, (state) => {
+      state.loadingforGetMeByToken = false;
+    });
 
-    [createUser.pending.type]: (state) => {
+    builder.addCase(createUser.pending.type, (state) => {
       state.loading = true;
-    },
-    [createUser.fulfilled.type]: (
-      state,
-      action: PayloadAction<UserDataResponse>
-    ) => {
-      state.loading = false;
-      state.error = "";
-      state.user = action.payload;
-    },
-    [createUser.rejected.type]: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
+    });
+    builder.addCase(
+      createUser.fulfilled.type,
+      (state, action: PayloadAction<UserDataResponse>) => {
+        state.loading = false;
+        state.error = "";
+        state.user = action.payload;
+      }
+    );
+
+    builder.addCase(
+      createUser.rejected.type,
+      (state, action: PayloadAction<string>) => {
+        state.error = action.payload;
+      }
+    );
   },
 });
 

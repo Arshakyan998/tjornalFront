@@ -5,7 +5,7 @@ interface Props {
   value: string;
 }
 
-const TabOptions: React.FC<Props> = ({ children, value }) => {
+const TabOptions: React.FC<Props> = ({ children }) => {
   return <>{children}</>;
 };
 
