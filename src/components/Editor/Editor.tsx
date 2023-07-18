@@ -1,14 +1,19 @@
 import React from "react";
-import EditorJS from "@editorjs/editorjs";
+import EditorJS, { OutputBlockData } from "@editorjs/editorjs";
 
-interface Props {}
+interface Props {
+  getContendBlocks: (blocks: OutputBlockData[]) => void;
+}
 
-const Editor: React.FC<Props> = () => {
+const Editor: React.FC<Props> = ({ getContendBlocks }) => {
   React.useEffect(() => {
     const editor = new EditorJS({
       holder: "editor",
       placeholder: "Test",
-      inlineToolbar: ["link", "marker", "bold", "italic"],
+      onChange: async (_, event) => {
+        let content = await editor.save();
+        getContendBlocks(content.blocks);
+      },
     });
 
     editor.isReady.then(console.log);
@@ -16,7 +21,7 @@ const Editor: React.FC<Props> = () => {
       console.log("out");
       editor.isReady
         .then(() => {
-            editor.destroy();
+          editor.destroy();
         })
         .catch(console.log);
     };

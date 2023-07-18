@@ -2,14 +2,17 @@ import { configureStore } from "@reduxjs/toolkit";
 // import getUser from "./GetUser";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import userSlice from "./User/UserSlice";
+import Posts from "./Posts";
 
 export const store = configureStore({
   reducer: {
     // [getUser.reducerPath]: getUser.reducer,
     [userSlice.name]: userSlice.reducer,
+    [Posts.reducerPath]: Posts.reducer,
   },
 
-  // middleware: (getDefaultMiddleware) =>
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(Posts.middleware),
   //   getDefaultMiddleware().concat(getUser.middleware),
 });
 setupListeners(store.dispatch);
